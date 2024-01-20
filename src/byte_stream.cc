@@ -3,7 +3,12 @@
 using namespace std;
 
 ByteStream::ByteStream( uint64_t capacity )
-  : capacity_( capacity ), error_( false ), /*byteStream()*/myByteStream(), isFinished_( false ), bytes_read( 0 ), bytes_written( 0 )
+  : capacity_( capacity )
+  , error_( false )
+  , myByteStream()
+  , isFinished_( false )
+  , bytes_read( 0 )
+  , bytes_written( 0 )
 {}
 
 bool Writer::is_closed() const
@@ -14,35 +19,11 @@ bool Writer::is_closed() const
 void Writer::push( string data )
 {
   (void)data;
-  uint64_t cur_char = 0;
-  while ( capacity_ != 0 ) {
-    if ( cur_char < data.size() ) {
-      myByteStream += ( data[cur_char] );
-      cur_char++;
-      bytes_written++;
-      capacity_--;
-    } else {
-      break;
-    }
-  }
-  return;
+  std::string sub_data = data.substr( 0, capacity_ );
+  myByteStream += sub_data;
+  capacity_ -= sub_data.size();
+  bytes_written += sub_data.size();
 }
-
-// {
-//   (void)data;
-//   uint64_t cur_char = 0;
-//   while ( capacity_ != 0 ) {
-//     if ( cur_char < data.size() ) {
-//       byteStream.push_back( data[cur_char] );
-//       cur_char++;
-//       bytes_written++;
-//       capacity_--;
-//     } else {
-//       break;
-//     }
-//   }
-//   return;
-// }
 
 void Writer::close()
 {
@@ -84,16 +65,23 @@ string_view Reader::peek() const
 void Reader::pop( uint64_t len )
 {
   (void)len;
-  uint64_t count = 0;
   uint64_t hold = min( myByteStream.size(), len );
-  while ( count < hold ) {
-    myByteStream = myByteStream.substr( 1 );
-    count++;
-  }
-  bytes_read += count;
-  capacity_ += count;
-
+  myByteStream = myByteStream.substr( hold, myByteStream.size() );
+  bytes_read += hold;
+  capacity_ += hold;
 }
+
+// {
+//   (void)len;
+//   uint64_t count = 0;
+//   uint64_t hold = min( myByteStream.size(), len );
+//   while ( count < hold ) {
+//     myByteStream = myByteStream.substr( 1 );
+//     count++;
+//   }
+//   bytes_read += count;
+//   capacity_ += count;
+// }
 
 uint64_t Reader::bytes_buffered() const
 {

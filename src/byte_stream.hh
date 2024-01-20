@@ -26,7 +26,6 @@ protected:
   // Please add any additional state to the ByteStream here, and not to the Writer and Reader interfaces.
   uint64_t capacity_;
   bool error_ {};
-  // std::vector<char> byteStream;
   std::string myByteStream;
   bool isFinished_;
   uint64_t bytes_read;
