@@ -71,18 +71,6 @@ void Reader::pop( uint64_t len )
   capacity_ += hold;
 }
 
-// {
-//   (void)len;
-//   uint64_t count = 0;
-//   uint64_t hold = min( myByteStream.size(), len );
-//   while ( count < hold ) {
-//     myByteStream = myByteStream.substr( 1 );
-//     count++;
-//   }
-//   bytes_read += count;
-//   capacity_ += count;
-// }
-
 uint64_t Reader::bytes_buffered() const
 {
   return bytes_written - bytes_read;
