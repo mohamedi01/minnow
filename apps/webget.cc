@@ -10,15 +10,15 @@ using namespace std;
 void get_URL( const string& host, const string& path )
 {
   Socket mySock = TCPSocket();
-  Address myAddr = Address(host, "80");
-  mySock.connect(myAddr);
-  string myRequest  = "GET " + path + " HTTP/1.1\r\n";
-  myRequest        += "Host: " + host + "\r\n";
-  myRequest        += "Connection: close\r\n\r\n";   // Second "\r\n" is to complete the "hit enter one more time" step
-  mySock.write(myRequest);
-  while (!mySock.eof()) {
+  Address myAddr = Address( host, "80" );
+  mySock.connect( myAddr );
+  string myRequest = "GET " + path + " HTTP/1.1\r\n";
+  myRequest += "Host: " + host + "\r\n";
+  myRequest += "Connection: close\r\n\r\n"; // Second "\r\n" is to complete the "hit enter one more time" step
+  mySock.write( myRequest );
+  while ( !mySock.eof() ) {
     string printAll;
-    mySock.read(printAll);
+    mySock.read( printAll );
     cout << printAll;
   }
   mySock.close();
