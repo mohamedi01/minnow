@@ -1,12 +1,19 @@
 #pragma once
 
 #include "byte_stream.hh"
+#include <map>
 
 class Reassembler
 {
 public:
   // Construct Reassembler to write into given ByteStream.
-  explicit Reassembler( ByteStream&& output ) : output_( std::move( output ) ) {}
+  explicit Reassembler( ByteStream&& output ) 
+  : output_( std::move( output ) )
+  , first_idx_( 0 )
+  , curr_idx_( 0 )
+  , final_idx_( 0 )
+  , waiting_()
+  {}
 
   /*
    * Insert a new substring to be reassembled into a ByteStream.
@@ -41,5 +48,9 @@ public:
   const Writer& writer() const { return output_.writer(); }
 
 private:
-  ByteStream output_; // the Reassembler writes to this ByteStream
+  ByteStream output_;   // the Reassembler writes to this ByteStream
+  uint64_t first_idx_;
+  uint64_t curr_idx_;   // Used to keep track of what index the reassembler is on
+  uint64_t final_idx_;  // Used in case we get the final substring early
+  std::map<uint64_t, std::string> waiting_;  // Used to hold waiting indecies
 };
